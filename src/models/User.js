@@ -18,15 +18,7 @@ const usuario = sequelize.define("user", {
     senha: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    hooks: {
-        beforeCreate: async (usuario) =>{
-            if(usuario.senha){
-                const salt = await bcrypt.genSalt(10)
-                usuario.senha = await bcrypt.hash(usuario.senha, salt)
-            }
-        }
-    },
+    }, 
     placaPrincipal: {
         type: DataTypes.STRING,
         allowNull: true, // Admin pode não ter placa vinculada
@@ -36,5 +28,15 @@ const usuario = sequelize.define("user", {
         type: DataTypes.ENUM('admin', 'user'),
         defaultValue: 'user'
     }
+    },{  
+      hooks: {
+        beforeCreate: async (usuario) =>{
+            if(usuario.senha){
+                const salt = await bcrypt.genSalt(10)
+                usuario.senha = await bcrypt.hash(usuario.senha, salt)
+            }
+        }
+    }
 });
 
+module.exports = usuario
